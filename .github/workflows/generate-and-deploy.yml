@@ -1,0 +1,64 @@
+# Install Python and dependencies, then run the generator on example content
+# and publish the result to the repo's Pages.
+
+name: Generate and publish
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+    
+# Allow one concurrent deployment
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+  
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python 3.11
+      uses: actions/setup-python@v3
+      with:
+        python-version: "3.11"
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+    - name: Generate the static website
+      run: |
+        python generate.py
+    - name: Store pages as artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: website
+        path: static/
+      
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Retrieve the artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: website
+      - name: Setup Pages
+        uses: actions/configure-pages@v2
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v1
+        with:
+          # Upload entire repository
+          path: '.'
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v1
+      
