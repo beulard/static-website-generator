@@ -1,14 +1,27 @@
 import http.server as serv
 import socketserver
-import os
+import argparse
+
 
 class Handler(serv.SimpleHTTPRequestHandler):
+    '''A simple handler that lives in the static/ directory'''
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, directory='static/', **kwargs)
+        super().__init__(*args, directory="static/", **kwargs)
 
-socketserver.TCPServer.allow_reuse_address = True
-os.chdir('static/')
 
-with socketserver.TCPServer(("", 8000), Handler) as httpd:
-    print("serving...")
-    httpd.serve_forever()
+def handle_command_line_arguments():
+    parser = argparse.ArgumentParser(description="Static HTTP server")
+    parser.add_argument("--port", "-P", type=int, default=8000)
+    return parser.parse_args()
+
+
+def serve():
+    args = handle_command_line_arguments()
+
+    with socketserver.TCPServer(("", args.port), Handler) as server:
+        print("serving on port %d..." % args.port)
+        server.serve_forever()
+
+
+if __name__ == "__main__":
+    serve()
