@@ -1,5 +1,7 @@
 # static-website-generator
 
+[![Generate and publish](https://github.com/beulard/static-website-generator/actions/workflows/generate-and-deploy.yml/badge.svg)](https://github.com/beulard/static-website-generator/actions/workflows/generate-and-deploy.yml)
+
 Generate static html pages from markdown source files containing blog-like
 entries.
 
