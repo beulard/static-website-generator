@@ -8,7 +8,9 @@ def build_entry(source_file, header):
 
     with open("content/" + source_file) as f:
         entry_html = md.markdown(
-            f.read(), extensions=["fenced_code", "codehilite", "wikilinks"], extension_configs={
+            f.read(),
+            extensions=["fenced_code", "codehilite", "wikilinks"],
+            extension_configs={
                 "wikilinks": {
                     "end_url": ".html"
                 }
