@@ -21,3 +21,8 @@ To visualize the output, run a simple server with
 python server.py
 ```
 and visit `http://localhost:8000`.
+
+## Example
+This repo uses Actions to generate and deploy the example website in the
+`content/` directory. See the result 
+[here](https://beulard.github.io/static-website-generator/).
